@@ -30,28 +30,37 @@
     <meta content="Dancing Snowman" property="og:description">
     <meta content="Dancing Snowman" property="og:site_name">
     <meta content="en_GB" property="og:locale">
-
     <meta content="d3HhJZ1wlOD9qoMvrcroUxkEWkWpdMvLT-YjsiPLcMs" name="google-site-verification"/>
   </head>
   <body>
-    <a class="mobile-link">
-      <span class="mobile-link__go">Click to go!</span>
-    </a>
-
     <div class="media">
       <audio class="media__audio" loop>
-        <source src="src/snowman-song.mp3" type="audio/mpeg"/>
+        <source src="src/snowman-song.mp3" type="audio/mpeg">
       </audio>
       <div class="animation">
+        <img class="sound" src="src/volume-off.png">
         <div class="animation__spinner"></div>
-        <img class="animation__image" src="src/frame.jpg"/>
+        <img class="animation__image" src="src/frame.jpg">
       </div>
     </div>
 
     <a class="credit" href="http://www.dineshraj.com">by Dineshraj</a>
     <script>
+        function getCorrectImage() {
+          var tinyScreen = window.innerWidth <= 400;
+          var smallScreen = window.innerWidth <= 1024;
+          var isDesktop =
+            !("ontouchstart" in window) || !("onmsgesturechange" in window);
+
+          if (tinyScreen && !isDesktop) {
+            return "lo.gif";
+          } else if (smallScreen && !isDesktop) {
+            return "med.gif";
+          }
+          return "hi.gif";
+        }
+
       function playAnimation() {
-        document.getElementsByClassName("media__audio")[0].play();
         // when playing remove static image
         var animationImage = document.querySelector(".animation__image");
         var hiddenAnimation = document.querySelector(".hidden_animation");
@@ -61,41 +70,38 @@
         hiddenAnimation.classList.remove("hidden_animation");
       }
 
-      function getCorrectImage() {
-        var tinyScreen = window.innerWidth <= 400;
-        var smallScreen = window.innerWidth <= 1024;
-        var isDesktop =
-          !("ontouchstart" in window) || !("onmsgesturechange" in window);
-
-        if (tinyScreen && !isDesktop) {
-          return "lo.gif";
-        } else if (smallScreen && !isDesktop) {
-          return "med.gif";
-        }
-        return "hi.gif";
+      function changeSoundIcon(soundIcon, changeTo) {
+        soundIcon.src = 'src/volume-' + changeTo + '.png';
       }
 
-      function play() {
-        document.querySelector('.mobile-link').style.display = 'none';
-        playAnimation();
+      function toggleSound(soundIcon) {
+        var audio = document.getElementsByClassName("media__audio")[0];
+        if (soundIcon.src.includes('off')) {
+          audio.play();
+          changeSoundIcon(soundIcon, 'on');
+        } else {
+          audio.pause();
+          changeSoundIcon(soundIcon, 'off');
+        }
       }
 
       window.onload = function() {
         var img = document.createElement('img'); 
         var animation = document.querySelector('.animation');
-        var goLink = document.querySelector('.mobile-link');
+        var soundIcon = document.querySelector('.sound');
+
+        soundIcon.addEventListener('click', function () {
+          toggleSound(soundIcon)
+        });
+        soundIcon.addEventListener('touchstart', function () {
+          toggleSound(soundIcon)
+        });
+
         animation.appendChild(img);
 
         img.onload = function () {
           document.querySelector('.animation__spinner').style.display = 'none';
-          document.querySelector('.mobile-link__go').style.display = 'block';
-
-          goLink.addEventListener('click', function (e) {
-            play();
-          });
-          goLink.addEventListener('touchstart', function (e) {
-            play();
-          });
+          playAnimation();
         }
 
         img.src = "src/snowman-" + getCorrectImage();
@@ -103,26 +109,12 @@
       };
     </script>
     <script>
-      (function(i, s, o, g, r, a, m) {
-        i["GoogleAnalyticsObject"] = r;
-        (i[r] =
-          i[r] ||
-          function() {
-            (i[r].q = i[r].q || []).push(arguments);
-          }),
-          (i[r].l = 1 * new Date());
-        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m);
-      })(
-        window,
-        document,
-        "script",
-        "https://www.google-analytics.com/analytics.js",
-        "ga"
-      );
-
+      (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
       ga("create", "UA-81644572-3", "auto");
       ga("send", "pageview");
     </script>
