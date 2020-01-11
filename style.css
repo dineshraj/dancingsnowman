@@ -21,8 +21,8 @@ a:hover {
 .sound {
   z-index: 1;
   position: absolute;
-  top: 6%;
-  left: 2%;
+  bottom: 6%;
+  right: 2%;
   border: 0.5vw solid black;
   border-radius: 50%;
   width: 6vw;
